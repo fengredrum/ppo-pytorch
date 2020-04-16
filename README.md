@@ -1,6 +1,6 @@
 # ppo-pytorch
  
-##Reference
+## Reference
 
 John Schulman, Philipp Moritz, Sergey Levine, Michael I. Jordan, and Pieter Abbeel. High-dimensional
 continuous control using generalized advantage estimation. CoRR, abs/1506.02438, 2015.
