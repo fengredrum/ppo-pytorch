@@ -9,7 +9,7 @@ from utils import cleanup_log_dir
 
 def get_args():
     parser = argparse.ArgumentParser(description='Batch_PPO')
-    parser.add_argument('--task_id', type=str, default='HalfCheetahBulletEnv-v0',
+    parser.add_argument('--task_id', type=str, default='AntBulletEnv-v0',
                         help='task name (default: Pendulum-v0)')
     parser.add_argument('--run_id', type=str, default='no_norm_env_1',
                         help="name of the run")
@@ -78,14 +78,14 @@ def get_args():
 
     # Create directories
     args.save_path = os.path.join("saves", args.task_id, args.run_id)
-    os.makedirs(args.save_path, exist_ok=True)
+    args.monitor_dir = os.path.join(args.monitor_dir, args.task_id, args.run_id)
     args.result_dir = os.path.join(args.result_dir, args.task_id)
+
+    os.makedirs(args.save_path, exist_ok=True)
+    os.makedirs(args.monitor_dir, exist_ok=True)
     os.makedirs(args.result_dir, exist_ok=True)
     os.makedirs(args.log_dir, exist_ok=True)
     cleanup_log_dir(args.log_dir)
-
-    args.monitor_dir = os.path.join(args.monitor_dir, args.task_id, args.run_id)
-    os.makedirs(args.monitor_dir, exist_ok=True)
 
     # Setup device and random seed
     random.seed(args.seed)

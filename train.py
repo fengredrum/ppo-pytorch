@@ -23,7 +23,7 @@ def main(args, idx):
 
     # Create training envs
     envs = make_vec_envs(args.task_id, args.seed, args.num_processes,
-                         args.gamma, args.log_dir, args.device)
+                         args.gamma, args.monitor_dir, args.device)
     obs_size = envs.observation_space.shape[0]
     act_size = envs.action_space.shape[0]
 
