@@ -2,8 +2,14 @@
 
 ## Experiment Results
 
+It takes about half an hour for $5e6$ training steps in a six cores MacBook Pro.
+
 <p align="center">
   <img src="results/HalfCheetahBulletEnv-v0/baseline.png" alt="HalfCheetahBulletEnv"/>
+</p>
+
+<p align="center">
+  <img src="results/AntBulletEnv-v0/baseline.png" alt="AntBulletEnv"/>
 </p>
 
 ## Reference
