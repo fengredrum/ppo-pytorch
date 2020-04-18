@@ -91,7 +91,7 @@ class DiagGaussian(nn.Module):
 
         self.fc_mean = nn.Sequential(
             init_(nn.Linear(num_inputs, num_outputs)),
-            nn.Tanh()
+            # nn.Tanh()
         )
 
         self.logstd = AddBias(torch.zeros(num_outputs))

@@ -11,7 +11,7 @@ def get_args():
     parser = argparse.ArgumentParser(description='Batch_PPO')
     parser.add_argument('--task_id', type=str, default='HalfCheetahBulletEnv-v0',
                         help='task name (default: Pendulum-v0)')
-    parser.add_argument('--run_id', type=str, default='no_norm_env',
+    parser.add_argument('--run_id', type=str, default='no_norm_env_1',
                         help="name of the run")
     parser.add_argument('--seed', type=int, default=1,
                         help='random seed (default: 1)')
@@ -55,6 +55,10 @@ def get_args():
                         help='log interval, one log per n updates (default: 1)')
     parser.add_argument('--log-dir', type=str, default='log/',
                         help='directory to save agent logs (default: log/)')
+    parser.add_argument('--monitor-dir', type=str, default='monitor_log/',
+                        help='directory to save monitor logs (default: monitor_log/)')
+    parser.add_argument('--result-dir', type=str, default='results/',
+                        help='directory to save plot results (default: results/)')
 
     # Evaluate performance
     parser.add_argument('--test_iters', type=int, default=int(1e4),
@@ -75,8 +79,13 @@ def get_args():
     # Create directories
     args.save_path = os.path.join("saves", args.task_id, args.run_id)
     os.makedirs(args.save_path, exist_ok=True)
+    args.result_dir = os.path.join(args.result_dir, args.task_id)
+    os.makedirs(args.result_dir, exist_ok=True)
     os.makedirs(args.log_dir, exist_ok=True)
     cleanup_log_dir(args.log_dir)
+
+    args.monitor_dir = os.path.join(args.monitor_dir, args.task_id, args.run_id)
+    os.makedirs(args.monitor_dir, exist_ok=True)
 
     # Setup device and random seed
     random.seed(args.seed)
