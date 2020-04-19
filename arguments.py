@@ -11,7 +11,7 @@ def get_args():
     parser = argparse.ArgumentParser(description='Batch_PPO')
     parser.add_argument('--task_id', type=str, default='AntBulletEnv-v0',
                         help='task name (default: Pendulum-v0)')
-    parser.add_argument('--run_id', type=str, default='no_norm_env_1',
+    parser.add_argument('--run_id', type=str, default='test',
                         help="name of the run")
     parser.add_argument('--seed', type=int, default=1,
                         help='random seed (default: 1)')
