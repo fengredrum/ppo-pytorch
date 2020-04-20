@@ -2,6 +2,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
+from torch.distributions import Normal
 from utils import init
 
 
@@ -72,7 +73,7 @@ class Policy(nn.Module):
 
 
 # Normal distribution
-class FixedNormal(torch.distributions.Normal):
+class FixedNormal(Normal):
     def log_probs(self, actions):
         return super().log_prob(actions).sum(-1, keepdim=True)
 
