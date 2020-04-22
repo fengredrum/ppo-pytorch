@@ -7,7 +7,7 @@ from utils import init
 
 
 class Policy(nn.Module):
-    def __init__(self, obs_size, act_size, action_range=None, hidden_size=128):
+    def __init__(self, obs_size, act_size, action_range=None, hidden_size=64):
         super(Policy, self).__init__()
 
         init_ = lambda m: init(m, nn.init.orthogonal_, lambda x: nn.init.
@@ -18,18 +18,19 @@ class Policy(nn.Module):
 
         self.actor = nn.Sequential(
             init_(nn.Linear(obs_size, hidden_size)),
-            nn.ReLU(),
+            nn.Tanh(),
             init_(nn.Linear(hidden_size, hidden_size)),
-            nn.ReLU(),
+            nn.Tanh(),
             init_(nn.Linear(hidden_size, act_size)),
+            nn.Tanh(),
         )
 
         self.critic = nn.Sequential(
             init_(nn.Linear(obs_size, hidden_size)),
-            nn.BatchNorm1d(hidden_size),
+            # nn.BatchNorm1d(hidden_size),
             nn.ReLU(),
             init_(nn.Linear(hidden_size, hidden_size)),
-            nn.BatchNorm1d(hidden_size),
+            # nn.BatchNorm1d(hidden_size),
             nn.ReLU(),
             init_(nn.Linear(hidden_size, 1)),
         )
@@ -44,10 +45,6 @@ class Policy(nn.Module):
             action = action_mean
         else:
             action = dist.sample()
-
-        # amp = 5.
-        # if self._range:
-        #     action = torch.clamp(action, self._range[0] * amp, self._range[1] * amp) / amp
 
         return action
 

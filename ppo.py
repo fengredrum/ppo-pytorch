@@ -43,14 +43,17 @@ class PPO:
         # Optimizer config
         self.optimizer = optim.Adam(actor_critic.parameters(), lr=lr, eps=eps)
 
+        self.kl = nn.KLDivLoss()
+
     def update(self, buffer):
         advantages = buffer.returns[:-1] - buffer.value_preds[:-1]
         if self.norm_advantage:
             advantages = (advantages - advantages.mean()) / (advantages.std() + 1e-6)
 
-        mean_value_loss = 0.
-        mean_action_loss = 0.
-        mean_entropy = 0.
+        value_loss_mean = 0.
+        action_loss_mean = 0.
+        entropy_mean = 0.
+        kl_mean = 0.
 
         for e in range(self.ppo_epoch):
             data_generator = buffer.batch_data_generator(advantages, self.num_mini_batch)
@@ -65,6 +68,8 @@ class PPO:
                     obs_batch, actions_batch)
 
                 # Compute action loss
+                kl_loss = self.kl(action_log_probs, old_action_log_probs_batch.exp())
+
                 ratio = torch.exp(action_log_probs -
                                   old_action_log_probs_batch)
                 surr_1 = ratio * adv_targ
@@ -101,17 +106,20 @@ class PPO:
                                              self.max_grad_norm)
                 self.optimizer.step()
 
-                mean_value_loss += value_loss.item()
-                mean_action_loss += action_loss.item()
-                mean_entropy += dist_entropy.item()
+                value_loss_mean += value_loss.item()
+                action_loss_mean += action_loss.item()
+                entropy_mean += dist_entropy.item()
+                kl_mean += kl_loss.item()
 
         num_updates = self.ppo_epoch * self.num_mini_batch
 
-        mean_value_loss /= num_updates
-        mean_action_loss /= num_updates
-        mean_entropy /= num_updates
+        value_loss_mean /= num_updates
+        action_loss_mean /= num_updates
+        entropy_mean /= num_updates
+        kl_mean /= num_updates
 
-        return dict(mean_action_loss=mean_action_loss,
-                    mean_value_loss=mean_value_loss,
-                    mean_entropy=mean_entropy,
+        return dict(action_loss_mean=action_loss_mean,
+                    value_loss_mean=value_loss_mean,
+                    entropy_mean=entropy_mean,
+                    kl_mean=kl_mean,
                     )

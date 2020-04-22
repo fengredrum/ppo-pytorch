@@ -108,4 +108,7 @@ if __name__ == '__main__':
                          args.gamma, args.log_dir, args.device)
 
     obs = envs.reset()
-    print(obs.shape)
+    print('obs: ', obs.shape)
+    print('low: ', envs.action_space.low[0])
+    print('high: ', envs.action_space.high[0])
+

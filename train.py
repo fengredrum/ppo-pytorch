@@ -70,6 +70,7 @@ def main(args, idx):
                 action = actor_critic(buffer.obs[step])
 
                 # Get trajectories from envs
+                # out_act = torch.clamp(action, envs.action_space.low[0], envs.action_space.high[0])
                 obs, reward, done, infos = envs.step(action)
                 mask = torch.tensor(
                     [[0.0] if done_ else [1.0] for done_ in done],
@@ -93,6 +94,17 @@ def main(args, idx):
 
         # Update policy
         agent_output = agent.update(buffer)
+
+        obs_batch = buffer.obs.view(-1, obs_size)
+        obs_mean = obs_batch.mean(dim=0)
+        obs_max = obs_batch.max(dim=0).values
+        obs_min = obs_batch.min(dim=0).values
+
+        act_batch = buffer.actions.view(-1, act_size)
+        act_mean = act_batch.mean(dim=0)
+        act_max = act_batch.max(dim=0).values
+        act_min = act_batch.min(dim=0).values
+
         buffer.after_update()
 
         # Log stuff
@@ -110,13 +122,18 @@ def main(args, idx):
                             np.median(episode_rewards), np.min(episode_rewards),
                             np.max(episode_rewards),
                             ))
-            writer.add_scalar('mean_reward', np.mean(episode_rewards), total_num_steps)
+            writer.add_scalar('reward_mean', np.mean(episode_rewards), total_num_steps)
             writer.add_scalar('speed', speed, total_num_steps)
             for key in agent_output.keys():
                 writer.add_scalar(key, agent_output[key], total_num_steps)
 
-            if args.task_id == 'Pendulum-v0' and np.mean(episode_rewards) > -250:
-                break
+            writer.add_histogram('action_mean', act_mean, total_num_steps)
+            writer.add_histogram('action_max', act_max, total_num_steps)
+            writer.add_histogram('action_min', act_min, total_num_steps)
+
+            writer.add_histogram('obs_mean', obs_mean, total_num_steps)
+            writer.add_histogram('obs_max', obs_max, total_num_steps)
+            writer.add_histogram('obs_min', obs_min, total_num_steps)
 
     envs.close()
     writer.close()
