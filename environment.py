@@ -7,8 +7,8 @@ from baselines import bench
 from baselines.common.vec_env import VecEnvWrapper
 from baselines.common.vec_env.dummy_vec_env import DummyVecEnv
 from baselines.common.vec_env.shmem_vec_env import ShmemVecEnv
-from baselines.common.vec_env.vec_normalize import \
-    VecNormalize as VecNormalize_
+# from baselines.common.vec_env.vec_normalize import \
+#     VecNormalize as VecNormalize_
 
 try:
     import pybullet_envs
@@ -77,27 +77,27 @@ class VecPyTorch(VecEnvWrapper):
         return obs, reward, done, info
 
 
-class VecNormalize(VecNormalize_):
-    def __init__(self, *args, **kwargs):
-        super(VecNormalize, self).__init__(*args, **kwargs)
-        self.training = True
-
-    def _obfilt(self, obs, update=True):
-        if self.ob_rms:
-            if self.training and update:
-                self.ob_rms.update(obs)
-            obs = np.clip((obs - self.ob_rms.mean) /
-                          np.sqrt((self.ob_rms.var + self.epsilon)),
-                          -self.clipob, self.clipob)
-            return obs
-        else:
-            return obs
-
-    def train(self):
-        self.training = True
-
-    def eval(self):
-        self.training = False
+# class VecNormalize(VecNormalize_):
+#     def __init__(self, *args, **kwargs):
+#         super(VecNormalize, self).__init__(*args, **kwargs)
+#         self.training = True
+#
+#     def _obfilt(self, obs, update=True):
+#         if self.ob_rms:
+#             if self.training and update:
+#                 self.ob_rms.update(obs)
+#             obs = np.clip((obs - self.ob_rms.mean) /
+#                           np.sqrt((self.ob_rms.var + self.epsilon)),
+#                           -self.clipob, self.clipob)
+#             return obs
+#         else:
+#             return obs
+#
+#     def train(self):
+#         self.training = True
+#
+#     def eval(self):
+#         self.training = False
 
 
 if __name__ == '__main__':

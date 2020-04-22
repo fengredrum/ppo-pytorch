@@ -1,5 +1,27 @@
 # ppo-pytorch
 
+This is a PyTorch implementation of PPO algorithm, 
+which is designed for flexible modification and high performance 
+in continuous control tasks.
+
+## Requirements 
+
+- pytorch 1.4.0
+- tensorboard
+- numpy
+- tqdm 
+- gym
+- baselines
+- pybullet (optional)
+
+## Setup
+
+You can use the provided `requirements.txt` file to install necessary dependencies.
+
+```bash
+$ pip install -r requirements.txt
+```
+
 ## Experiment Results
 
 It takes about half an hour for $5e6$ training steps in a six cores MacBook Pro.
