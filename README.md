@@ -27,8 +27,20 @@ $ pip install -r requirements.txt
 For example, to train a ppo agent using 12 processes for pybullet ant locomotion task as follows:
 
 ```bash
-$ python 
+$ python train.py --task-id=AntBulletEnv-v0 --num-processes=12 --num-env-steps=5000000
 ```
+
+You can also monitor the training process and perform hyper-parameters tuning using tensorboard:
+
+```bash
+$ tensorboard --logdir=log
+```
+
+Here is what the log looks like:
+
+<img src="results/tensorboard_fig/reward_mean.png" alt="reward_mean" width="500px">
+
+<img src="results/tensorboard_fig/action_mean.png" alt="reward_mean" width="500px">
 
 ## Experiment Results
 
