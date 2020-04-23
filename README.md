@@ -36,13 +36,13 @@ You can also monitor the training process and perform hyper-parameters tuning us
 $ tensorboard --logdir=log
 ```
 
-Here is what the log looks like:
+Here is what it looks like:
 
-<img src="results/tensorboard_fig/reward_mean.png" alt="reward_mean" width="500px">
+reward | action
+:-----:|:-----:
+<img src="results/tensorboard_fig/reward_mean.png" alt="reward_mean" width="500px"> | <img src="results/tensorboard_fig/action_mean.png" alt="reward_mean" width="500px">
 
-<img src="results/tensorboard_fig/action_mean.png" alt="reward_mean" width="500px">
-
-## Experiment Results
+## Experimental Results
 
 It takes about half an hour for $5e6$ training steps in a six cores MacBook Pro.
 
