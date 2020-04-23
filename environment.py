@@ -7,8 +7,6 @@ from baselines import bench
 from baselines.common.vec_env import VecEnvWrapper
 from baselines.common.vec_env.dummy_vec_env import DummyVecEnv
 from baselines.common.vec_env.shmem_vec_env import ShmemVecEnv
-# from baselines.common.vec_env.vec_normalize import \
-#     VecNormalize as VecNormalize_
 
 try:
     import pybullet_envs
@@ -20,6 +18,7 @@ def make_env(env_id, seed, rank, log_dir):
     def _thunk():
         env = gym.make(env_id)
         env.seed(seed + rank)
+        env = GymToFloat32(env)
         if log_dir is not None:
             env = bench.Monitor(env, os.path.join(log_dir, str(rank)))
         return env
@@ -55,6 +54,25 @@ def make_vec_envs(env_name,
     return envs
 
 
+class GymToFloat32(gym.ObservationWrapper):
+
+    def __init__(self, env):
+        super(GymToFloat32, self).__init__(env)
+        old_shape = self.observation_space.shape
+        self.observation_space = gym.spaces.Box(
+            low=-1.0,
+            high=1.0,
+            shape=old_shape,
+            dtype=np.float32,
+        )
+
+    def observation(self, observation):
+        if observation.dtype != np.float32:
+            return observation.astype(np.float32)
+        else:
+            return observation
+
+
 class VecPyTorch(VecEnvWrapper):
     def __init__(self, venv, device):
         """Return only every `skip`-th frame"""
@@ -77,29 +95,6 @@ class VecPyTorch(VecEnvWrapper):
         return obs, reward, done, info
 
 
-# class VecNormalize(VecNormalize_):
-#     def __init__(self, *args, **kwargs):
-#         super(VecNormalize, self).__init__(*args, **kwargs)
-#         self.training = True
-#
-#     def _obfilt(self, obs, update=True):
-#         if self.ob_rms:
-#             if self.training and update:
-#                 self.ob_rms.update(obs)
-#             obs = np.clip((obs - self.ob_rms.mean) /
-#                           np.sqrt((self.ob_rms.var + self.epsilon)),
-#                           -self.clipob, self.clipob)
-#             return obs
-#         else:
-#             return obs
-#
-#     def train(self):
-#         self.training = True
-#
-#     def eval(self):
-#         self.training = False
-
-
 if __name__ == '__main__':
     from arguments import get_args
 
@@ -111,4 +106,3 @@ if __name__ == '__main__':
     print('obs: ', obs.shape)
     print('low: ', envs.action_space.low[0])
     print('high: ', envs.action_space.high[0])
-
