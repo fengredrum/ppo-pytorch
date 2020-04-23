@@ -22,6 +22,14 @@ You can use the provided `requirements.txt` file to install necessary dependenci
 $ pip install -r requirements.txt
 ```
 
+## Training PPO agents
+
+For example, to train a ppo agent using 12 processes for pybullet ant locomotion task as follows:
+
+```bash
+$ python 
+```
+
 ## Experiment Results
 
 It takes about half an hour for $5e6$ training steps in a six cores MacBook Pro.

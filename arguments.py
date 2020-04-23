@@ -9,15 +9,15 @@ from utils import cleanup_log_dir
 
 def get_args():
     parser = argparse.ArgumentParser(description='Batch_PPO')
-    parser.add_argument('--task_id', type=str, default='AntBulletEnv-v0',
+    parser.add_argument('--task-id', type=str, default='AntBulletEnv-v0',
                         help='task name (default: Pendulum-v0)')
-    parser.add_argument('--run_id', type=str, default='test',
+    parser.add_argument('--run-id', type=str, default='test',
                         help="name of the run")
     parser.add_argument('--seed', type=int, default=1,
                         help='random seed (default: 1)')
-    parser.add_argument('--num_processes', type=int, default=12,
+    parser.add_argument('--num-processes', type=int, default=12,
                         help='number of parallel processes (default: 12)')
-    parser.add_argument("--disable_cuda", default=False, help='Disable CUDA')
+    parser.add_argument("--disable-cuda", default=False, help='Disable CUDA')
 
     # Training config
     parser.add_argument('--num-env-steps', type=int, default=5e6,
@@ -61,11 +61,11 @@ def get_args():
                         help='directory to save plot results (default: results/)')
 
     # Evaluate performance
-    parser.add_argument('--test_iters', type=int, default=int(1e4),
+    parser.add_argument('--test-iters', type=int, default=int(1e4),
                         help='test iterations (default: 1000)')
-    parser.add_argument('--video_width', type=int, default=720,
+    parser.add_argument('--video-width', type=int, default=720,
                         help='video resolution (default: 720)')
-    parser.add_argument('--video_height', type=int, default=720,
+    parser.add_argument('--video-height', type=int, default=720,
                         help='video resolution (default: 720)')
 
     # Saving and restoring setup
