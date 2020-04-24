@@ -44,7 +44,7 @@ reward | action
 
 ## Experimental Results
 
-It takes about half an hour for $5e6$ training steps in a six cores MacBook Pro.
+It takes about half an hour for 5M training steps in a six cores MacBook Pro.
 
 HalfCheetahBulletEnv |  AntBulletEnv
 :----------------------------------------------------------------------------:|:-----------------------------------------:
