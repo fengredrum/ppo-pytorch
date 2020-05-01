@@ -1,10 +1,26 @@
 import numpy as np
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 from torch.distributions import Normal
 from utils import init
 
+class Mish(nn.Module):
+    def __init__(self):
+        super(Mish, self).__init__()
+
+    def forward(self, x):
+        x = x * (torch.tanh(F.softplus(x)))
+        return x
+
+class Swish(nn.Module):
+    def __init__(self):
+        super(Swish, self).__init__()
+
+    def forward(self, x):
+        x = x * F.sigmoid(x)
+        return x
 
 class Policy(nn.Module):
     def __init__(self, obs_size, act_size, action_range=None, hidden_size=64):
@@ -18,19 +34,16 @@ class Policy(nn.Module):
 
         self.actor = nn.Sequential(
             init_(nn.Linear(obs_size, hidden_size)),
-            nn.Tanh(),
+            nn.ReLU(),
             init_(nn.Linear(hidden_size, hidden_size)),
-            nn.Tanh(),
+            nn.ReLU(),
             init_(nn.Linear(hidden_size, act_size)),
-            nn.Tanh(),
         )
 
         self.critic = nn.Sequential(
             init_(nn.Linear(obs_size, hidden_size)),
-            # nn.BatchNorm1d(hidden_size),
             nn.ReLU(),
             init_(nn.Linear(hidden_size, hidden_size)),
-            # nn.BatchNorm1d(hidden_size),
             nn.ReLU(),
             init_(nn.Linear(hidden_size, 1)),
         )
